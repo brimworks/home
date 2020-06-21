@@ -19,15 +19,24 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.14.0'
     - name: Build home command
       run: go build home.go
       env:
         GOOS: linux
         GOARM: 7
         GOARCH: arm
-
-    - uses: actions/upload-artifact@v2
+    - uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: home
-        path: home
+        tag_name: latest
+        release_name: Release of ${{ github.sha }}
+        draft: false
+        prerelease: true
+#    - uses: actions/upload-artifact@v2
+#      with:
+#        name: home
+#        path: home
