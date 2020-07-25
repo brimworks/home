@@ -1,0 +1,15 @@
+[Unit]
+Description=Home Server
+After=network.target ntp.service nats-server.service
+
+[Service]
+PrivateTmp=true
+Type=simple
+ExecStart=/opt/home/bin/nats-server -c /opt/home/etc/nats-server.conf
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s SIGINT $MAINPID
+User=home
+Group=home
+
+[Install]
+WantedBy=multi-user.target

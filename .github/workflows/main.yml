@@ -22,12 +22,12 @@ jobs:
     - uses: actions/setup-go@v2
       with:
         go-version: '^1.14.0'
-    - name: Build home command
-      run: go build home.go
+    - run: go build -o bin/home src/home.go
       env:
         GOOS: linux
         GOARM: 7
         GOARCH: arm
+    - run: tar -czvf home.tgz bin etc
     - uses: actions/create-release@v1
       id: create_release
       env:
@@ -42,9 +42,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./home
-        asset_name: home
-        asset_content_type: application/octet-stream
+        asset_path: ./home.tgz
+        asset_name: home.tgz
+        asset_content_type: application/gzip
 #    - uses: actions/upload-artifact@v2
 #      with:
 #        name: home
